@@ -1,0 +1,219 @@
+//Test- case  1 
+1.Navigate to DemoWebshop application 
+2.Click on login link .
+3.Enter email and password and click on login button by reading the data from property file.
+
+
+package assessments;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class Testcase1 {
+
+	public static void main(String[] args) throws IOException {
+		FileInputStream fis=new FileInputStream("./src/test/resources/DDT/DemoWebShop.properties");
+		Properties p=new Properties();
+		p.load(fis);
+		String BROWSER=p.getProperty("Browser");
+		String URL=p.getProperty("URL");
+		String email = p.getProperty("Email");
+		String pass=p.getProperty("Password");
+		WebDriver driver=null;
+		if(BROWSER.contains("chrome"))
+		{
+			driver= new ChromeDriver();
+		}
+		if(BROWSER.contains("edge"))
+		{
+			driver= new EdgeDriver();
+		}
+		if(BROWSER.contains("firefox"))
+		{
+			driver= new FirefoxDriver();
+		}
+		driver.manage().window().maximize();
+		driver.get(URL);
+		driver.findElement(By.xpath("//a[text()='Log in']")).click();
+		driver.findElement(By.id("Email")).sendKeys(email);
+		driver.findElement(By.id("Password")).sendKeys(pass);
+		driver.findElement(By.cssSelector("[value='Log in']")).click();
+			
+
+	}
+
+}
+
+
+
+//Testcase 2 
+
+1.Navigate to orange Hrm application
+2.Enter the username password and click on login buuton
+by redaing the data from excel file.
+
+
+package assignments;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.time.Duration;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class Testcase2 {
+
+	public static void main(String[] args) throws EncryptedDocumentException, IOException, InterruptedException {
+
+		FileInputStream fis = new FileInputStream("./src/test/resources/DDT/Testcase2.xlsx");
+		
+		Workbook wb = WorkbookFactory.create(fis);
+		
+		String browser = wb.getSheet("Sheet1").getRow(1).getCell(0).getStringCellValue().toString();
+		String url = wb.getSheet("Sheet1").getRow(1).getCell(1).getStringCellValue().toString();
+		String un = wb.getSheet("Sheet1").getRow(1).getCell(2).getStringCellValue().toString();
+		String pwd = wb.getSheet("Sheet1").getRow(1).getCell(3).getStringCellValue().toString();
+		
+		WebDriver driver = null;
+		
+		switch(browser)
+			{
+			case("chrome"):
+			{
+				driver = new ChromeDriver();
+				break;
+			}
+			case("edge"):
+			{
+				driver = new EdgeDriver();
+				break;
+			}
+			case("firefox"):
+			{
+				driver = new FirefoxDriver();
+				break;
+			}
+		}
+		
+		driver.manage().window().maximize();
+		
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		
+		driver.get(url);
+		
+		driver.findElement(By.name("username")).sendKeys(un);
+		
+		driver.findElement(By.name("password")).sendKeys(pwd);
+	
+		Thread.sleep(1000);
+		driver.findElement(By.xpath("//button[@type='submit']")).click();
+	
+		WebElement text = driver.findElement(By.xpath("//h6[text()='Dashboard']"));
+	
+		if(text.isDisplayed())
+			System.out.println("login successful");
+		else
+			System.out.println("not login");
+		
+		Thread.sleep(2000);
+		driver.quit();
+	}
+
+}
+
+
+
+//Testcase 3 
+
+1.Navigate to Demoappsqspiders application
+2.Enter name, email,password and click on login  submit button
+3.Read the data from json file.
+
+
+package assessments;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.time.Duration;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class Testcase3 {
+
+	public static void main(String[] args) throws IOException, Exception {
+
+		FileReader fir = new FileReader("./src/test/resources/DDT/Testcase3.json");
+		
+		JSONParser j = new JSONParser();
+		
+		Object javaobj = j.parse(fir);
+		
+		JSONObject json = (JSONObject)javaobj;
+		
+		String browser = json.get("browser").toString();
+		String url = json.get("url").toString();
+		String name = json.get("name").toString();
+		String email = json.get("email").toString();
+		String pwd = json.get("password").toString();
+		
+		WebDriver driver = null;
+		
+		switch(browser)
+			{
+			case("chrome"):
+			{
+				driver = new ChromeDriver();
+				break;
+			}
+			case("edge"):
+			{
+				driver = new EdgeDriver();
+				break;
+			}
+			case("firefox"):
+			{
+				driver = new FirefoxDriver();
+				break;
+			}
+		}
+		
+		driver.manage().window().maximize();
+		
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		
+		driver.get(url);
+		
+		driver.findElement(By.id("name")).sendKeys(name,Keys.TAB,email,Keys.TAB,pwd);
+		
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//button[text()='Register']")).click();
+		
+		Thread.sleep(2000);
+		driver.quit();
+
+	}
+
+}
