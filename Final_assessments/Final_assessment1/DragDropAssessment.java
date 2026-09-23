@@ -1,0 +1,41 @@
+package Final_assessment1;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+
+public class DragDropAssessment {
+
+    public static void main(String[] args) throws InterruptedException {
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("https://demoapps.qspiders.com/ui/dragDrop/dragToMultiple?sublist=3");
+        Thread.sleep(3000);
+
+        Actions act = new Actions(driver);
+        WebElement laptopCharger = driver.findElement(By.xpath("//*[text()='Laptop Charger']"));
+        WebElement mobileCover = driver.findElement(By.xpath("//*[text()='Mobile Cover']"));
+        WebElement laptopCover = driver.findElement(By.xpath("//*[text()='Laptop Cover']"));
+        WebElement mobileCharger = driver.findElement(By.xpath("//*[text()='Mobile Charger']"));
+
+        WebElement mobileAccessories = driver.findElement(By.id("dropZone1"));
+        WebElement laptopAccessories = driver.findElement(By.id("dropZone2"));
+        
+        laptopCharger.click();
+        laptopCover.click();
+        
+        act.dragAndDrop(laptopCover, laptopAccessories).perform();
+        
+        mobileCharger.click();
+        mobileCover.click();
+        
+        act.dragAndDrop(mobileCover, mobileAccessories).perform();
+
+        System.out.println("Accessories dropped successfully");
+        Thread.sleep(2000);
+
+        driver.quit();
+    }
+}
